@@ -1,32 +1,66 @@
-# Prerequisites
-*.d
+// Program: The 100 game in Python. In this game, players take turns choosing a number from 1 to 10.
+//          Each number the player chooses is added to a counter. The first player to reach a total of 100 wins.
+// Author: Areig Isameldin Ibrahim , no section yet , 20230709
+// Version: 4.0
+// Date: 29 Feb 2024
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+#include <iostream>
+using namespace std;
 
-# Precompiled Headers
-*.gch
-*.pch
+// Function to take a turn for a player
+int take_turn(string player_name) {
+    while (true) {
+        try {
+            int move;
+            cout << player_name << ", enter a number from 1 to 10: ";
+            cin >> move;  // Prompt the player to enter a number
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
+            if (move >= 1 && move <= 10) {  // Check if the number is within the valid range
+                return move;
+            }
+            else {
+                cout << "Please enter a number between 1 and 10." << endl;  // Print an error message for an invalid move
+            }
+        }
+        catch (...) {
+            cout << "Please enter a valid integer." << endl;  // Print an error message for an invalid input
+        }
+    }
+}
 
-# Fortran module files
-*.mod
-*.smod
+int main() {
+    string player1_name, player2_name;
+    cout << "Enter Player 1's name: ";
+    getline(cin, player1_name);  // Get the name of Player 1 from the user
+    cout << "Enter Player 2's name: ";
+    getline(cin, player2_name);  // Get the name of Player 2 from the user
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
+    int counter = 0;  // Initialize the counter to keep track of the total
+    int current_player = 1;  // Initialize the current player to Player 1
 
-# Executables
-*.exe
-*.out
-*.app
+    while (counter < 100) {  // Continue the game until the counter reaches 100
+        int move;
+        if (current_player == 1) {  // If it's Player 1's turn
+            move = take_turn(player1_name);  // Player 1 takes a turn
+        }
+        else {
+            move = take_turn(player2_name);  // Player 2 takes a turn
+        }
+
+        counter += move;  // Add the move to the counter
+
+        if (counter > 100) {  // If the counter goes over 100
+            cout << current_player << " went over 100. Try again, " << (current_player == 1 ? player1_name : player2_name) << "!" << endl;
+            counter -= move;  // Undo the move that went over 100
+        }
+
+        if (counter == 100) {  // If the counter reaches 100
+            cout << current_player << " wins! Congratulations, " << (current_player == 1 ? player1_name : player2_name) << "!" << endl;
+            break;  // Exit the loop and end the game
+        }
+
+        current_player = 3 - current_player;  // Switch players (1 to 2, 2 to 1) for the next turn
+    }
+
+    return 0;
+}
